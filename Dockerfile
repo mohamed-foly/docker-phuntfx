@@ -12,7 +12,7 @@ ENV LC_ALL     en_US.UTF-8
 
 ENV HOME /root
 
-RUN apt-get update && apt-get install -y curl gnupg &&  curl -sS 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c' | gpg --dearmor | tee /etc/apt/keyrings/ppa_ondrej_php.gpg > /dev/null \
+RUN apt-get update && apt-get install -y curl gnupg ca-certificates zip unzip git &&  curl -sS 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c' | gpg --dearmor | tee /etc/apt/keyrings/ppa_ondrej_php.gpg > /dev/null \
     && echo "deb [signed-by=/etc/apt/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ppa_ondrej_php.list
 
 RUN DEBIAN_FRONTEND="noninteractive" export RUNLEVEL=0 && apt-get update && \
