@@ -2,16 +2,14 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ master ]
+    branches: [ '*' ]
 
 jobs:
-
-  build:
-
+  master-build-push:
+    if: github.ref_name == 'master'
     runs-on: ubuntu-latest
-
     steps:
       -
         name: Checkout
@@ -28,3 +26,23 @@ jobs:
         with:
           push: true
           tags: m0foly/phuntfx:latest
+
+  tags-build-push:
+    if: github.ref_name != 'master'
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_ID }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: m0foly/phuntfx:${{ github.ref_name }}
